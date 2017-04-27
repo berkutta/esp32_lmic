@@ -1,8 +1,5 @@
-#
-# Main component makefile.
-#
-# This Makefile can be left empty. By default, it will take the sources in the 
-# src/ directory, compile them and link them into lib(subdirectory_name).a 
-# in the build directory. This behaviour is entirely configurable,
-# please read the ESP-IDF documents if you need to do this.
-#
+CFLAGS += -c -std=gnu99
+CFLAGS += -fno-common -fmessage-length=0 -fno-builtin -fno-exceptions -ffunction-sections -fdata-sections -fomit-frame-pointer -MMD -MP
+CFLAGS += -DSTM32L1XX_MD -DCFG_DEBUG -DCFG_eu868 -DCFG_wimod_board -DCFG_sx1276_radio -DCFG_lmic_clib
+CFLAGS += -Wno-maybe-uninitialized -Wno-maybe-uninitialized -Werror=unused-value -Wno-unused-value
+
