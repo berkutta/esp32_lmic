@@ -28,6 +28,21 @@
 #ifndef _hal_hpp_
 #define _hal_hpp_
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "oslmic.h"
+#include "esp_log.h"
+#include "driver/gpio.h"
+#include "driver/spi_master.h"
+#include "driver/timer.h"
+#include "config.h"
+#include "esp_event.h"
+#include "esp_event_loop.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "esp_system.h"
+
 /*
  * initialize hardware (IO, SPI, TIMER, IRQ).
  */
@@ -57,7 +72,7 @@ u1_t hal_spi (u1_t outval);
 
 /*
  * disable all CPU interrupts.
- *   - might be invoked nested 
+ *   - might be invoked nested
  *   - will be followed by matching call to hal_enableIRQs()
  */
 void hal_disableIRQs (void);

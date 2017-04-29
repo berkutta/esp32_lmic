@@ -133,7 +133,7 @@ u2_t os_crc16 (xref2u1_t data, uint len) {
         for( u1_t bit = 8; bit > 0; bit--) {
             if( (remainder & 0x8000) )
                 remainder = (remainder << 1) ^ polynomial;
-            else 
+            else
                 remainder <<= 1;
         }
     }
@@ -371,13 +371,13 @@ static const u1_t DRADJUST[2+TXCONF_ATTEMPTS] = {
 
 // Table below defines the size of one symbol as
 //   symtime = 256us * 2^T(sf,bw)
-// 256us is called one symunit. 
-//                 SF:                                  
+// 256us is called one symunit.
+//                 SF:
 //      BW:      |__7___8___9__10__11__12
 //      125kHz   |  2   3   4   5   6   7
 //      250kHz   |  1   2   3   4   5   6
 //      500kHz   |  0   1   2   3   4   5
-//  
+//
 // Times for half symbol per DR
 // Per DR table to minimize rounding errors
 static const ostime_t DR2HSYM_osticks[] = {
@@ -511,7 +511,7 @@ static void setDrTxpow (u1_t reason, u1_t dr, s1_t pow) {
                         e_.txpow     = pow,
                         e_.prevdr    = LMIC.datarate|DR_PAGE,
                         e_.prevtxpow = LMIC.adrTxPow));
-    
+
     if( pow != KEEP_TXPOW )
         LMIC.adrTxPow = pow;
     if( LMIC.datarate != dr ) {
@@ -579,7 +579,7 @@ static void initDefaultChannels (bit_t join) {
     LMIC.bands[BAND_DECI ].txcap    = 10;    // 10%
     LMIC.bands[BAND_DECI ].txpow    = 27;
     LMIC.bands[BAND_CENTI].lastchnl = os_getRndU1() % MAX_CHANNELS;
-    LMIC.bands[BAND_MILLI].avail = 
+    LMIC.bands[BAND_MILLI].avail =
     LMIC.bands[BAND_CENTI].avail =
     LMIC.bands[BAND_DECI ].avail = os_getTime();
 }
@@ -603,8 +603,8 @@ bit_t LMIC_setupChannel (u1_t chidx, u4_t freq, u2_t drmap, s1_t band) {
             freq |= BAND_DECI;   // 10% 27dBm
         else if( (freq >= 868000000 && freq <= 868600000) ||
                  (freq >= 869700000 && freq <= 870000000)  )
-            freq |= BAND_CENTI;  // 1% 14dBm 
-        else 
+            freq |= BAND_CENTI;  // 1% 14dBm
+        else
             freq |= BAND_MILLI;  // 0.1% 14dBm
     } else {
         if( band > BAND_AUX ) return 0;
@@ -1040,14 +1040,14 @@ static bit_t decodeFrame (void) {
         if( (s4_t)seqno > (s4_t)LMIC.seqnoDn ) {
             EV(specCond, INFO, (e_.reason = EV::specCond_t::DNSEQNO_ROLL_OVER,
                                 e_.eui    = MAIN::CDEV->getEui(),
-                                e_.info   = LMIC.seqnoDn, 
+                                e_.info   = LMIC.seqnoDn,
                                 e_.info2  = seqno));
             goto norx;
         }
         if( seqno != LMIC.seqnoDn-1 || !LMIC.dnConf || ftype != HDR_FTYPE_DCDN ) {
             EV(specCond, INFO, (e_.reason = EV::specCond_t::DNSEQNO_OBSOLETE,
                                 e_.eui    = MAIN::CDEV->getEui(),
-                                e_.info   = LMIC.seqnoDn, 
+                                e_.info   = LMIC.seqnoDn,
                                 e_.info2  = seqno));
             goto norx;
         }
@@ -1059,7 +1059,7 @@ static bit_t decodeFrame (void) {
         if( seqno > LMIC.seqnoDn ) {
             EV(specCond, INFO, (e_.reason = EV::specCond_t::DNSEQNO_SKIP,
                                 e_.eui    = MAIN::CDEV->getEui(),
-                                e_.info   = LMIC.seqnoDn, 
+                                e_.info   = LMIC.seqnoDn,
                                 e_.info2  = seqno));
         }
         LMIC.seqnoDn = seqno+1;  // next number to be expected
@@ -1189,7 +1189,7 @@ static bit_t decodeFrame (void) {
                                        + ms2osticksCeil(MCMD_BCNI_TUNIT/2)
                                        - BCN_INTV_osticks);
                 LMIC.bcninfo.flags = 0;  // txtime above cannot be used as reference (BCN_PARTIAL|BCN_FULL cleared)
-                calcBcnRxWindowFromMillis(MCMD_BCNI_TUNIT,1);  // error of +/-N ms 
+                calcBcnRxWindowFromMillis(MCMD_BCNI_TUNIT,1);  // error of +/-N ms
 
                 EV(lostFrame, INFO, (e_.reason  = EV::lostFrame_t::MCMD_BCNI_ANS,
                                      e_.eui     = MAIN::CDEV->getEui(),
@@ -1418,7 +1418,7 @@ static bit_t processJoinAccept (void) {
                         e_.reason  = ((LMIC.opmode & OP_REJOIN) != 0
                                       ? EV::joininfo_t::REJOIN_ACCEPT
                                       : EV::joininfo_t::ACCEPT)));
-    
+
     ASSERT((LMIC.opmode & (OP_JOINING|OP_REJOIN))!=0);
     if( (LMIC.opmode & OP_REJOIN) != 0 ) {
         // Lower DR every try below current UP DR
@@ -1471,7 +1471,7 @@ static void processRx2DnDataDelay (xref2osjob_t osjob) {
 static void processRx2DnData (xref2osjob_t osjob) {
     if( LMIC.dataLen == 0 ) {
         LMIC.txrxFlags = 0;  // nothing in 1st/2nd DN slot
-        // Delay callback processing to avoid up TX while gateway is txing our missed frame! 
+        // Delay callback processing to avoid up TX while gateway is txing our missed frame!
         // Since DNW2 uses SF12 by default we wait 3 secs.
         os_setTimedCallback(&LMIC.osjob,
                             (os_getTime() + DNW2_SAFETY_ZONE + rndDelay(2)),
@@ -1503,7 +1503,7 @@ static void updataDone (xref2osjob_t osjob) {
     txDone(DELAY_DNW1_osticks, FUNC_ADDR(setupRx1DnData));
 }
 
-// ======================================== 
+// ========================================
 
 
 static void buildDataFrame (void) {
@@ -1900,7 +1900,7 @@ static void processBeacon (xref2osjob_t osjob) {
         }
     }
     LMIC.bcnRxtime = LMIC.bcninfo.txtime + BCN_INTV_osticks - calcRxWindow(0,DR_BCN);
-    LMIC.bcnRxsyms = LMIC.rxsyms;    
+    LMIC.bcnRxsyms = LMIC.rxsyms;
   rev:
 #if CFG_us915
     LMIC.bcnChnl = (LMIC.bcnChnl+1) & 7;
@@ -1926,7 +1926,7 @@ static void startRxPing (xref2osjob_t osjob) {
 // Decide what to do next for the MAC layer of a device
 static void engineUpdate (void) {
     // Check for ongoing state: scan or TX/RX transaction
-    if( (LMIC.opmode & (OP_SCAN|OP_TXRXPEND|OP_SHUTDOWN)) != 0 ) 
+    if( (LMIC.opmode & (OP_SCAN|OP_TXRXPEND|OP_SHUTDOWN)) != 0 )
         return;
 
     if( LMIC.devaddr == 0 && (LMIC.opmode & OP_JOINING) == 0 ) {
@@ -1988,7 +1988,7 @@ static void engineUpdate (void) {
                     // Imminent roll over - proactively reset MAC
                     EV(specCond, INFO, (e_.reason = EV::specCond_t::DNSEQNO_ROLL_OVER,
                                         e_.eui    = MAIN::CDEV->getEui(),
-                                        e_.info   = LMIC.seqnoDn, 
+                                        e_.info   = LMIC.seqnoDn,
                                         e_.info2  = 0));
                     // Device has to react! NWK will not roll over and just stop sending.
                     // Thus, we have N frames to detect a possible lock up.
@@ -2171,7 +2171,7 @@ void LMIC_tryRejoin (void) {
 }
 
 //! \brief Setup given session keys
-//! and put the MAC in a state as if 
+//! and put the MAC in a state as if
 //! a join request/accept would have negotiated just these keys.
 //! It is crucial that the combinations `devaddr/nwkkey` and `devaddr/artkey`
 //! are unique within the network identified by `netid`.
@@ -2191,11 +2191,11 @@ void LMIC_setSession (u4_t netid, devaddr_t devaddr, xref2u1_t nwkKey, xref2u1_t
         os_copyMem(LMIC.nwkKey, nwkKey, 16);
     if( artKey != (xref2u1_t)0 )
         os_copyMem(LMIC.artKey, artKey, 16);
-    
+
 #if defined(CFG_eu868)
     initDefaultChannels(0);
 #endif
- 
+
     LMIC.opmode &= ~(OP_JOINING|OP_TRACK|OP_REJOIN|OP_TXRXPEND|OP_PINGINI);
     LMIC.opmode |= OP_NEXTCHNL;
     stateJustJoined();
@@ -2219,5 +2219,3 @@ void LMIC_setLinkCheckMode (bit_t enabled) {
     LMIC.adrChanged = 0;
     LMIC.adrAckReq = enabled ? LINK_CHECK_INIT : LINK_CHECK_OFF;
 }
-
- 

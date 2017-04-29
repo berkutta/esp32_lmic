@@ -3,11 +3,8 @@
 #include "esp_system.h"
 #include "esp_event.h"
 #include "esp_event_loop.h"
-#include "nvs_flash.h"
-#include "driver/gpio.h"
 
 #include "lmic.h"
-#include "oslmic.h"
 
 u1_t NWKSKEY[16] = { 0x33, 0xDA, 0xEF, 0x09, 0x56, 0xEB, 0x8E, 0xA6, 0xB3, 0x8F, 0xDC, 0x72, 0xB1, 0xEE, 0xE6, 0x69 };
 u1_t APPSKEY[16] = { 0x7E, 0x34, 0x7E, 0x65, 0x93, 0x26, 0x90, 0x79, 0x5B, 0x46, 0xBC, 0x7E, 0xEA, 0x16, 0x88, 0x83 };
@@ -74,8 +71,6 @@ void onEvent (ev_t ev) {
               printf(LMIC.dataLen);
               printf(" bytes of payload");
             }
-            // Schedule next transmission
-            os_setTimedCallback(&sendjob, os_getTime()+sec2osticks(TX_INTERVAL), do_send);
             break;
         case EV_LOST_TSYNC:
             printf("EV_LOST_TSYNC");
@@ -99,7 +94,15 @@ void onEvent (ev_t ev) {
     }
 }
 
-static void lmic_task(void *arg) {
+esp_err_t event_handler(void *ctx, system_event_t *event)
+{
+    return ESP_OK;
+}
+
+void app_main(void)
+{
+    //nvs_flash_init();
+
     os_init();
 
     LMIC_reset();
@@ -127,35 +130,16 @@ static void lmic_task(void *arg) {
 
     for(int i = 1; i <= 8; i++) LMIC_disableChannel(i);
 
-    do_send(&sendjob);
-
-    os_runloop();
-
-    while(1) {
-
+   if (LMIC.opmode & OP_TXRXPEND) {
+        printf("OP_TXRXPEND, not sending");
+    } else {
+        // Prepare upstream data transmission at the next possible time.
+        LMIC_setTxData2(1, mydata, sizeof(mydata)-1, 0);
+        printf("Packet queued");
     }
-}
 
-static void print_task(void *arg) {
-    while(1) {
-      printf("Task\n");
-      vTaskDelay( 500 / portTICK_RATE_MS );
-    }
-}
 
-esp_err_t event_handler(void *ctx, system_event_t *event)
-{
-    return ESP_OK;
-}
 
-void app_main(void)
-{
-    nvs_flash_init();
+    xTaskCreate(os_loop_task, "os_loop_task", 1024 * 2, (void* )0, 10, NULL);
 
-    xTaskCreate(print_task, "print_task", 1024 * 2, (void* )0, 10, NULL);
-    xTaskCreate(lmic_task, "lmic_task", 1024 * 2, (void* )0, 10, NULL);
-
-    while (true) {
-
-    }
 }

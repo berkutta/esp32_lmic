@@ -26,8 +26,11 @@
  */
 
 #include "lmic.h"
-#include <stdio.h>
-#include <unistd.h>
+#include "esp_event.h"
+#include "esp_log.h"
+#include "esp_event_loop.h"
+//#include <stdio.h>
+//#include <unistd.h>
 
 // RUNTIME STATE
 static struct {
@@ -102,9 +105,8 @@ void os_setTimedCallback (osjob_t* job, ostime_t time, osjobcb_t cb) {
 }
 
 // execute jobs from timer and from run queue
-void os_runloop () {
+void os_loop_task () {
     while(1) {
-	printf("run");
         osjob_t* j = NULL;
         hal_disableIRQs();
         // check for runnable jobs
@@ -115,12 +117,12 @@ void os_runloop () {
             j = OS.scheduledjobs;
             OS.scheduledjobs = j->next;
         } else { // nothing pending
+		vTaskDelay(50 / portTICK_PERIOD_MS);
             hal_sleep(); // wake by irq (timer already restarted)
         }
         hal_enableIRQs();
         if(j) { // run job callback
             j->func(j);
         }
-        vTaskDelay( 500 / portTICK_RATE_MS );
     }
 }
