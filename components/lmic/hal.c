@@ -212,8 +212,6 @@ u1_t hal_spi (u1_t data) {
     return (u1_t) rxData;
 }
 
-#ifdef CFG_lmic_clib
-
 // -----------------------------------------------------------------------------
 // TIME
 
@@ -335,4 +333,3 @@ void hal_failed () {
     while(1);
 }
 
-#endif // CFG_lmic_clib
