@@ -17,7 +17,7 @@ void os_getDevKey (u1_t* buf) { }
 
 static uint8_t mydata[] = "Uela!";
 
-const unsigned TX_INTERVAL = 0;
+const unsigned TX_INTERVAL = 30;
 
 void onEvent (ev_t ev) {
     printf("%d", os_getTime());
@@ -58,6 +58,14 @@ void onEvent (ev_t ev) {
               printf("Received ");
               printf(LMIC.dataLen);
               printf(" bytes of payload");
+            }
+
+            if (LMIC.opmode & OP_TXRXPEND) {
+                printf("OP_TXRXPEND, not sending");
+            } else {
+                // Prepare upstream data transmission at the next possible time.
+                LMIC_setTxData2(1, mydata, sizeof(mydata)-1, 0);
+                printf("Packet queued");
             }
             break;
         case EV_LOST_TSYNC:
