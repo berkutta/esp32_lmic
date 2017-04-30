@@ -27,7 +27,7 @@
 
 #include "lmic.h"
 
-// ---------------------------------------- 
+// ----------------------------------------
 // Registers Mapping
 #define RegFifo                                    0x00 // common
 #define RegOpMode                                  0x01 // common
@@ -47,46 +47,46 @@
 #define FSKRegRssiConfig                           0x0E
 #define LORARegFifoTxBaseAddr                      0x0E
 #define FSKRegRssiCollision                        0x0F
-#define LORARegFifoRxBaseAddr                      0x0F 
+#define LORARegFifoRxBaseAddr                      0x0F
 #define FSKRegRssiThresh                           0x10
 #define LORARegFifoRxCurrentAddr                   0x10
 #define FSKRegRssiValue                            0x11
-#define LORARegIrqFlagsMask                        0x11 
+#define LORARegIrqFlagsMask                        0x11
 #define FSKRegRxBw                                 0x12
-#define LORARegIrqFlags                            0x12 
+#define LORARegIrqFlags                            0x12
 #define FSKRegAfcBw                                0x13
-#define LORARegRxNbBytes                           0x13 
+#define LORARegRxNbBytes                           0x13
 #define FSKRegOokPeak                              0x14
-#define LORARegRxHeaderCntValueMsb                 0x14 
+#define LORARegRxHeaderCntValueMsb                 0x14
 #define FSKRegOokFix                               0x15
-#define LORARegRxHeaderCntValueLsb                 0x15 
+#define LORARegRxHeaderCntValueLsb                 0x15
 #define FSKRegOokAvg                               0x16
-#define LORARegRxPacketCntValueMsb                 0x16 
-#define LORARegRxpacketCntValueLsb                 0x17 
-#define LORARegModemStat                           0x18 
-#define LORARegPktSnrValue                         0x19 
+#define LORARegRxPacketCntValueMsb                 0x16
+#define LORARegRxpacketCntValueLsb                 0x17
+#define LORARegModemStat                           0x18
+#define LORARegPktSnrValue                         0x19
 #define FSKRegAfcFei                               0x1A
-#define LORARegPktRssiValue                        0x1A 
+#define LORARegPktRssiValue                        0x1A
 #define FSKRegAfcMsb                               0x1B
-#define LORARegRssiValue                           0x1B 
+#define LORARegRssiValue                           0x1B
 #define FSKRegAfcLsb                               0x1C
-#define LORARegHopChannel                          0x1C 
+#define LORARegHopChannel                          0x1C
 #define FSKRegFeiMsb                               0x1D
-#define LORARegModemConfig1                        0x1D 
+#define LORARegModemConfig1                        0x1D
 #define FSKRegFeiLsb                               0x1E
-#define LORARegModemConfig2                        0x1E 
+#define LORARegModemConfig2                        0x1E
 #define FSKRegPreambleDetect                       0x1F
-#define LORARegSymbTimeoutLsb                      0x1F 
+#define LORARegSymbTimeoutLsb                      0x1F
 #define FSKRegRxTimeout1                           0x20
-#define LORARegPreambleMsb                         0x20 
+#define LORARegPreambleMsb                         0x20
 #define FSKRegRxTimeout2                           0x21
-#define LORARegPreambleLsb                         0x21 
+#define LORARegPreambleLsb                         0x21
 #define FSKRegRxTimeout3                           0x22
-#define LORARegPayloadLength                       0x22 
+#define LORARegPayloadLength                       0x22
 #define FSKRegRxDelay                              0x23
-#define LORARegPayloadMaxLength                    0x23 
+#define LORARegPayloadMaxLength                    0x23
 #define FSKRegOsc                                  0x24
-#define LORARegHopPeriod                           0x24 
+#define LORARegHopPeriod                           0x24
 #define FSKRegPreambleMsb                          0x25
 #define LORARegFifoRxByteAddr                      0x25
 #define LORARegModemConfig3                        0x26
@@ -174,12 +174,12 @@
 #define SX1276_MC1_CR_4_7            0x06
 #define SX1276_MC1_CR_4_8            0x08
 
-#define SX1276_MC1_IMPLICIT_HEADER_MODE_ON    0x01 
-                                                    
-// sx1276 RegModemConfig2          
+#define SX1276_MC1_IMPLICIT_HEADER_MODE_ON    0x01
+
+// sx1276 RegModemConfig2
 #define SX1276_MC2_RX_PAYLOAD_CRCON        0x04
 
-// sx1276 RegModemConfig3          
+// sx1276 RegModemConfig3
 #define SX1276_MC3_LOW_DATA_RATE_OPTIMIZE  0x08
 #define SX1276_MC3_AGCAUTO                 0x04
 
@@ -195,7 +195,7 @@
 
 
 
-// ---------------------------------------- 
+// ----------------------------------------
 // Constants for radio registers
 #define OPMODE_LORA      0x80
 #define OPMODE_MASK      0x07
@@ -205,8 +205,8 @@
 #define OPMODE_TX        0x03
 #define OPMODE_FSRX      0x04
 #define OPMODE_RX        0x05
-#define OPMODE_RX_SINGLE 0x06 
-#define OPMODE_CAD       0x07 
+#define OPMODE_RX_SINGLE 0x06
+#define OPMODE_CAD       0x07
 
 // ----------------------------------------
 // Bits masking the corresponding IRQs from the radio
@@ -364,7 +364,7 @@ static void configLoraModem () {
             mc2 |= SX1276_MC2_RX_PAYLOAD_CRCON;
         }
         writeReg(LORARegModemConfig2, mc2);
-        
+
         mc3 = SX1276_MC3_AGCAUTO;
         if ((sf == SF11 || sf == SF12) && getBw(LMIC.rps) == BW125) {
             mc3 |= SX1276_MC3_LOW_DATA_RATE_OPTIMIZE;
@@ -379,22 +379,22 @@ static void configLoraModem () {
         case CR_4_7: mc1 |= SX1272_MC1_CR_4_7; break;
         case CR_4_8: mc1 |= SX1272_MC1_CR_4_8; break;
         }
-        
+
         if ((sf == SF11 || sf == SF12) && getBw(LMIC.rps) == BW125) {
             mc1 |= SX1272_MC1_LOW_DATA_RATE_OPTIMIZE;
         }
-        
+
         if (getNocrc(LMIC.rps) == 0) {
             mc1 |= SX1272_MC1_RX_PAYLOAD_CRCON;
         }
-        
+
         if (getIh(LMIC.rps)) {
             mc1 |= SX1272_MC1_IMPLICIT_HEADER_MODE_ON;
             writeReg(LORARegPayloadLength, getIh(LMIC.rps)); // required length
         }
         // set ModemConfig1
         writeReg(LORARegModemConfig1, mc1);
-        
+
         // set ModemConfig2 (sf, AgcAutoOn=1 SymbTimeoutHi=00)
         writeReg(LORARegModemConfig2, (SX1272_MC2_SF7 + ((sf-1)<<4)) | 0x04);
 
@@ -411,7 +411,7 @@ static void configLoraModem () {
 
 static void configChannel () {
     // set frequency: FQ = (FRF * 32 Mhz) / (2 ^ 19)
-    u8_t frf = ((u8_t)LMIC.freq << 19) / 32000000;
+    ll_u8_t frf = ((ll_u8_t)LMIC.freq << 19) / 32000000;
     writeReg(RegFrfMsb, (u1_t)(frf>>16));
     writeReg(RegFrfMid, (u1_t)(frf>> 8));
     writeReg(RegFrfLsb, (u1_t)(frf>> 0));
@@ -475,7 +475,7 @@ static void txfsk () {
     // set the IRQ mapping DIO0=PacketSent DIO1=NOP DIO2=NOP
     writeReg(RegDioMapping1, MAP_DIO0_FSK_READY|MAP_DIO1_FSK_NOP|MAP_DIO2_FSK_TXNOP);
 
-    // initialize the payload size and address pointers    
+    // initialize the payload size and address pointers
     writeReg(FSKRegPayloadLength, LMIC.dataLen+1); // (insert length byte into payload))
 
     // download length byte and buffer to the radio FIFO
@@ -484,7 +484,7 @@ static void txfsk () {
 
     // enable antenna switch for TX
     hal_pin_rxtx(1);
-    
+
     // now we actually start the transmission
     opmode(OPMODE_TX);
 }
@@ -506,7 +506,7 @@ static void txlora () {
     configPower();
     // set sync word
     writeReg(LORARegSyncWord, LORA_MAC_PREAMBLE);
-    
+
     // set the IRQ mapping DIO0=TxDone DIO1=NOP DIO2=NOP
     writeReg(RegDioMapping1, MAP_DIO0_LORA_TXDONE|MAP_DIO1_LORA_NOP|MAP_DIO2_LORA_NOP);
     // clear all radio IRQ flags
@@ -514,17 +514,17 @@ static void txlora () {
     // mask all IRQs but TxDone
     writeReg(LORARegIrqFlagsMask, ~IRQ_LORA_TXDONE_MASK);
 
-    // initialize the payload size and address pointers    
+    // initialize the payload size and address pointers
     writeReg(LORARegFifoTxBaseAddr, 0x00);
     writeReg(LORARegFifoAddrPtr, 0x00);
     writeReg(LORARegPayloadLength, LMIC.dataLen);
-       
+
     // download buffer to the radio FIFO
     writeBuf(RegFifo, LMIC.frame, LMIC.dataLen);
 
     // enable antenna switch for TX
     hal_pin_rxtx(1);
-    
+
     // now we actually start the transmission
     opmode(OPMODE_TX);
 }
@@ -567,7 +567,7 @@ static void rxlora (u1_t rxmode) {
         configChannel();
     }
     // set LNA gain
-    writeReg(RegLna, LNA_RX_GAIN); 
+    writeReg(RegLna, LNA_RX_GAIN);
     // set max payload size
     writeReg(LORARegPayloadMaxLength, 64);
     // use inverted I/Q signal (prevent mote-to-mote communication)
@@ -583,7 +583,7 @@ static void rxlora (u1_t rxmode) {
     writeReg(LORARegSymbTimeoutLsb, LMIC.rxsyms);
     // set sync word
     writeReg(LORARegSyncWord, LORA_MAC_PREAMBLE);
-    
+
     // configure DIO mapping DIO0=RxDone DIO1=RxTout DIO2=NOP
     writeReg(RegDioMapping1, MAP_DIO0_LORA_RXDONE|MAP_DIO1_LORA_RXTOUT|MAP_DIO2_LORA_NOP);
     // clear all radio IRQ flags
@@ -599,7 +599,7 @@ static void rxlora (u1_t rxmode) {
         hal_waitUntil(LMIC.rxtime); // busy wait until exact rx time
         opmode(OPMODE_RX_SINGLE);
     } else { // continous rx (scan or rssi)
-        opmode(OPMODE_RX); 
+        opmode(OPMODE_RX);
     }
 }
 
@@ -642,13 +642,13 @@ static void rxfsk (u1_t rxmode) {
     // set frequency deviation
     writeReg(FSKRegFdevMsb, 0x01); // +/- 25kHz
     writeReg(FSKRegFdevLsb, 0x99);
-    
+
     // configure DIO mapping DIO0=PayloadReady DIO1=NOP DIO2=TimeOut
     writeReg(RegDioMapping1, MAP_DIO0_FSK_READY|MAP_DIO1_FSK_NOP|MAP_DIO2_FSK_TIMEOUT);
 
     // enable antenna switch for RX
     hal_pin_rxtx(0);
-    
+
     // now instruct the radio to receive
     hal_waitUntil(LMIC.rxtime); // busy wait until exact rx time
     opmode(OPMODE_RX); // no single rx mode available in FSK
@@ -684,7 +684,7 @@ void radio_init () {
     // some sanity checks, e.g., read version number
     u1_t v = readReg(RegVersion);
 #ifdef CFG_sx1276_radio
-    ASSERT(v == 0x12 ); 
+    ASSERT(v == 0x12 );
 #elif CFG_sx1272_radio
     ASSERT(v == 0x22);
 #else
@@ -701,11 +701,11 @@ void radio_init () {
         }
     }
     randbuf[0] = 16; // set initial index
-  
+
 #ifdef CFG_sx1276mb1_board
     // chain calibration
     writeReg(RegPaConfig, 0);
-    
+
     // Launch Rx chain calibration for LF band
     writeReg(FSKRegImageCal, (readReg(FSKRegImageCal) & RF_IMAGECAL_IMAGECAL_MASK)|RF_IMAGECAL_IMAGECAL_START);
     while((readReg(FSKRegImageCal)&RF_IMAGECAL_IMAGECAL_RUNNING) == RF_IMAGECAL_IMAGECAL_RUNNING){ ; }
@@ -716,7 +716,7 @@ void radio_init () {
     writeReg(RegFrfMid, (u1_t)(frf>> 8));
     writeReg(RegFrfLsb, (u1_t)(frf>> 0));
 
-    // Launch Rx chain calibration for HF band 
+    // Launch Rx chain calibration for HF band
     writeReg(FSKRegImageCal, (readReg(FSKRegImageCal) & RF_IMAGECAL_IMAGECAL_MASK)|RF_IMAGECAL_IMAGECAL_START);
     while((readReg(FSKRegImageCal) & RF_IMAGECAL_IMAGECAL_RUNNING) == RF_IMAGECAL_IMAGECAL_RUNNING) { ; }
 #endif /* CFG_sx1276mb1_board */
@@ -786,7 +786,7 @@ void radio_irq_handler (u1_t dio) {
             LMIC.dataLen = (readReg(LORARegModemConfig1) & SX1272_MC1_IMPLICIT_HEADER_MODE_ON) ?
                 readReg(LORARegPayloadLength) : readReg(LORARegRxNbBytes);
             // set FIFO read address pointer
-            writeReg(LORARegFifoAddrPtr, readReg(LORARegFifoRxCurrentAddr)); 
+            writeReg(LORARegFifoAddrPtr, readReg(LORARegFifoRxCurrentAddr));
             // now read the FIFO
             readBuf(RegFifo, LMIC.frame, LMIC.dataLen);
             // read rx quality parameters
@@ -841,7 +841,7 @@ void os_radio (u1_t mode) {
         // transmit frame now
         starttx(); // buf=LMIC.frame, len=LMIC.dataLen
         break;
-      
+
       case RADIO_RX:
         // receive frame now (exactly at rxtime)
         startrx(RXMODE_SINGLE); // buf=LMIC.frame, time=LMIC.rxtime, timeout=LMIC.rxsyms

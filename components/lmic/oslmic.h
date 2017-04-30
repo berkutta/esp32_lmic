@@ -45,8 +45,8 @@ typedef unsigned short     u2_t;
 typedef          short     s2_t;
 typedef unsigned int       u4_t;
 typedef          int       s4_t;
-typedef unsigned long long u8_t;
-typedef          long long s8_t;
+typedef unsigned long long ll_u8_t;
+typedef          long long ll_s8_t;
 typedef unsigned int       uint;
 typedef const char* str_t;
 
@@ -96,7 +96,7 @@ u1_t radio_rand1 (void);
 void radio_init (void);
 void radio_irq_handler (u1_t dio);
 void os_init (void);
-void os_runloop (void);
+void os_run (void);
 
 //================================================================================
 
@@ -117,16 +117,16 @@ void os_runloop (void);
 typedef s4_t  ostime_t;
 
 #if !HAS_ostick_conv
-#define us2osticks(us)   ((ostime_t)( ((s8_t)(us) * OSTICKS_PER_SEC) / 1000000))
-#define ms2osticks(ms)   ((ostime_t)( ((s8_t)(ms) * OSTICKS_PER_SEC)    / 1000))
-#define sec2osticks(sec) ((ostime_t)( (s8_t)(sec) * OSTICKS_PER_SEC))
-#define osticks2ms(os)   ((s4_t)(((os)*(s8_t)1000    ) / OSTICKS_PER_SEC))
-#define osticks2us(os)   ((s4_t)(((os)*(s8_t)1000000 ) / OSTICKS_PER_SEC))
+#define us2osticks(us)   ((ostime_t)( ((ll_s8_t)(us) * OSTICKS_PER_SEC) / 1000000))
+#define ms2osticks(ms)   ((ostime_t)( ((ll_s8_t)(ms) * OSTICKS_PER_SEC)    / 1000))
+#define sec2osticks(sec) ((ostime_t)( (ll_s8_t)(sec) * OSTICKS_PER_SEC))
+#define osticks2ms(os)   ((s4_t)(((os)*(ll_s8_t)1000    ) / OSTICKS_PER_SEC))
+#define osticks2us(os)   ((s4_t)(((os)*(ll_s8_t)1000000 ) / OSTICKS_PER_SEC))
 // Special versions
-#define us2osticksCeil(us)  ((ostime_t)( ((s8_t)(us) * OSTICKS_PER_SEC + 999999) / 1000000))
-#define us2osticksRound(us) ((ostime_t)( ((s8_t)(us) * OSTICKS_PER_SEC + 500000) / 1000000))
-#define ms2osticksCeil(ms)  ((ostime_t)( ((s8_t)(ms) * OSTICKS_PER_SEC + 999) / 1000))
-#define ms2osticksRound(ms) ((ostime_t)( ((s8_t)(ms) * OSTICKS_PER_SEC + 500) / 1000))
+#define us2osticksCeil(us)  ((ostime_t)( ((ll_s8_t)(us) * OSTICKS_PER_SEC + 999999) / 1000000))
+#define us2osticksRound(us) ((ostime_t)( ((ll_s8_t)(us) * OSTICKS_PER_SEC + 500000) / 1000000))
+#define ms2osticksCeil(ms)  ((ostime_t)( ((ll_s8_t)(ms) * OSTICKS_PER_SEC + 999) / 1000))
+#define ms2osticksRound(ms) ((ostime_t)( ((ll_s8_t)(ms) * OSTICKS_PER_SEC + 500) / 1000))
 #endif
 
 
@@ -209,11 +209,11 @@ u2_t os_crc16 (xref2u1_t d, uint len);
 #endif // !HAS_os_calls
 
 // ======================================================================
-// AES support 
+// AES support
 // !!Keep in sync with lorabase.hpp!!
 
 #ifndef AES_ENC  // if AES_ENC is defined as macro all other values must be too
-#define AES_ENC       0x00 
+#define AES_ENC       0x00
 #define AES_DEC       0x01
 #define AES_MIC       0x02
 #define AES_CTR       0x04
